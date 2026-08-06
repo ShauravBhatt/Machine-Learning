@@ -15,6 +15,9 @@ from scipy.stats import pearsonr
 from scipy.stats import chi2_contingency
 
 
+from sklearn.model_selection import train_test_split # Train-test split
+from sklearn.linear_model import LinearRegression # Regression model
+
 """
 =========================================================
 Load Dataset
@@ -52,7 +55,7 @@ Shows:
 • Memory usage
 =========================================================
 """
-data.info()
+# data.info()
 
 
 """
@@ -520,7 +523,7 @@ them usually doesn't provide any benefit.
 =========================================================
 """
 
-print(data.columns)
+# print(data.columns)
 
 # ============================================================
 # Project 1 - Part 3
@@ -768,7 +771,7 @@ final_df = data[
     ]
 ]
 
-print(final_df)
+# print(final_df)
 
 """
 =========================================
@@ -789,3 +792,31 @@ to improve accuracy and generalization.
 Next Step → Model Training
 =========================================
 """
+
+
+# ============================================================
+# Part 2 - Train-Test Split & Model Training
+# ============================================================
+
+# 'charges' ko predict karna hai, isliye ise target (y) banaya.
+# Baaki saare columns input features (X) hain.
+X = final_df.drop('charges', axis=1)
+y = final_df['charges']
+
+# Dataset ko 80% training aur 20% testing me divide kiya.
+# Training data se model seekhega aur testing data se uski performance check hogi.
+# random_state=42 dene se har baar same data split milega.
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Split hone ke baad har dataset ka size dekhne ke liye.
+# print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+
+# Linear Regression algorithm ka object banaya.
+# Abhi model sirf create hua hai, isne kuch seekha nahi hai.
+model = LinearRegression()
+
+# Training data (X_train, y_train) dekar model ko train kiya.
+# Ab model input features aur charges ke beech relationship seekh chuka hai.
+model.fit(X_train, y_train)

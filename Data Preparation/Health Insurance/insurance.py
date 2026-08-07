@@ -18,6 +18,9 @@ from scipy.stats import chi2_contingency
 from sklearn.model_selection import train_test_split # Train-test split
 from sklearn.linear_model import LinearRegression # Regression model
 
+
+from sklearn.metrics import r2_score # Model accuracy metric
+
 """
 =========================================================
 Load Dataset
@@ -820,3 +823,41 @@ model = LinearRegression()
 # Training data (X_train, y_train) dekar model ko train kiya.
 # Ab model input features aur charges ke beech relationship seekh chuka hai.
 model.fit(X_train, y_train)
+
+# ============================================================
+# Part 3 - Measuring Performance Metrics of the Model
+# ============================================================
+
+# Test data (X_test) par prediction karna
+# Model har test sample ke liye predicted value return karega
+y_pred = model.predict(X_test)
+
+# R² Score calculate karna
+# Ye batata hai ki model actual data ko kitna achhe se explain kar raha hai.
+# R² = 1  -> Perfect model
+# R² = 0  -> Average performance
+# R² < 0  -> Poor model
+r2 = r2_score(y_test, y_pred)
+
+# Test dataset me total kitne samples (rows) hain
+n = X_test.shape[0]
+
+# Total independent variables (features/columns) kitni hain
+p = X_test.shape[1]
+
+# Adjusted R² Score calculate karna
+# Ye R² ka improved version hai.
+# Agar model me unnecessary features add kiye gaye hain,
+# to Adjusted R² unke liye penalty lagata hai.
+#
+# Formula:
+# Adjusted R² = 1 - ((1 - R²) * (n - 1) / (n - p - 1))
+#
+# jahan:
+# n = total samples
+# p = total features
+# R² = normal R² score
+adjusted_r2_score = 1 - ((1 - r2) * (n - 1) / (n - p - 1))
+
+# Adjusted R² Score print karne ke liye
+# print(adjusted_r2_score)
